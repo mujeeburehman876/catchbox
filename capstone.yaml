@@ -1,0 +1,74 @@
+name: flyrank-capstone-widget-platform
+track: backend
+capstone: Embeddable Widget & Lead-Capture Platform
+
+run: |
+  npm install
+  npm run migrate
+  npm start
+
+seed: |
+  npm run seed
+
+test: |
+  npm test
+
+base_url: http://localhost:3000
+
+endpoints:
+  # --- Auth (creates a tenant / widget owner account) ---
+  - method: POST
+    path: /api/auth/register
+    auth: none
+  - method: POST
+    path: /api/auth/login
+    auth: none
+
+  # --- Widget management (authenticated, tenant-isolated) ---
+  - method: POST
+    path: /api/widgets
+    auth: bearer
+  - method: GET
+    path: /api/widgets
+    auth: bearer
+  - method: GET
+    path: /api/widgets/:id
+    auth: bearer
+  - method: PATCH
+    path: /api/widgets/:id
+    auth: bearer
+  - method: DELETE
+    path: /api/widgets/:id
+    auth: bearer
+  - method: GET
+    path: /api/widgets/:id/embed-snippet
+    auth: bearer
+
+  # --- Public widget delivery (cached, CORS, no auth) ---
+  - method: GET
+    path: /widgets/:id/config
+    auth: none
+  - method: GET
+    path: /widget.js
+    auth: none
+
+  # --- Public submission (CORS, rate-limited, spam-checked) ---
+  - method: OPTIONS
+    path: /api/public/submissions
+    auth: none
+  - method: POST
+    path: /api/public/submissions
+    auth: none
+
+  # --- Dashboard (authenticated) ---
+  - method: GET
+    path: /api/dashboard/widgets/:id/submissions
+    auth: bearer
+  - method: GET
+    path: /api/dashboard/widgets/:id/stats
+    auth: bearer
+  - method: GET
+    path: /api/dashboard/overview
+    auth: bearer
+
+health: /healthz
