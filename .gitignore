@@ -1,0 +1,9 @@
+node_modules/
+data/
+*.sqlite3
+*.sqlite3-journal
+.env
+coverage/
+npm-debug.log*
+.DS_Store
+dist/
